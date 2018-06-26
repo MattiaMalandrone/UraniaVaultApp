@@ -1,0 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var lista_albi_component_1 = require("./lista-albi/lista-albi.component");
+var dettaglio_albo_component_1 = require("./dettaglio-albo/dettaglio-albo.component");
+exports.COMPONENTS = [
+    lista_albi_component_1.ListaAlbiComponent,
+    dettaglio_albo_component_1.DettaglioAlboComponent
+];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDBFQUF1RTtBQUN2RSxzRkFBbUY7QUFFdEUsUUFBQSxVQUFVLEdBQVU7SUFDN0IseUNBQWtCO0lBQ2xCLGlEQUFzQjtDQUN6QixDQUFBIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTGlzdGFBbGJpQ29tcG9uZW50IH0gZnJvbSBcIi4vbGlzdGEtYWxiaS9saXN0YS1hbGJpLmNvbXBvbmVudFwiO1xyXG5pbXBvcnQgeyBEZXR0YWdsaW9BbGJvQ29tcG9uZW50IH0gZnJvbSBcIi4vZGV0dGFnbGlvLWFsYm8vZGV0dGFnbGlvLWFsYm8uY29tcG9uZW50XCI7XHJcblxyXG5leHBvcnQgY29uc3QgQ09NUE9ORU5UUzogYW55W10gPSBbXHJcbiAgICBMaXN0YUFsYmlDb21wb25lbnQsXHJcbiAgICBEZXR0YWdsaW9BbGJvQ29tcG9uZW50XHJcbl0iXX0=

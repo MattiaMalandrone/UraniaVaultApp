@@ -1,8 +1,13 @@
 {
-  "android": {
-    "v8Flags": "--expose_gc"
-  },
+  "name": "name",
   "main": "main.js",
-  "name": "tns-template-hello-world-ng",
-  "version": "4.1.0"
+  "version": "X.X.X",
+  "author": {
+    "name": "Name",
+    "email": "some@email.com"
+  },
+  "description": "some desc!",
+  "repository": {
+    "url": "https://github.com/yourrepo"
+  }
 }

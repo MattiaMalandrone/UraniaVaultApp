@@ -1,30 +1,19 @@
-import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
-import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
+// angular
+import { NgModule } from "@angular/core";
 
+// app
+import { CoreModule } from "./modules/core/core.module";
+import { SharedModule } from "./modules/shared/shared.module";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 
 @NgModule({
-    bootstrap: [
-        AppComponent
-    ],
-    imports: [
-        NativeScriptModule,
-        NativeScriptFormsModule,
-        NativeScriptHttpClientModule,
-        AppRoutingModule
-    ],
-    declarations: [
-        AppComponent
-    ],
-    providers: [
-
-    ],
-    schemas: [
-        NO_ERRORS_SCHEMA
-    ]
+  imports: [
+    CoreModule,
+    SharedModule,
+    AppRoutingModule
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
-
 export class AppModule { }

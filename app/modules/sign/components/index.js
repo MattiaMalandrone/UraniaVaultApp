@@ -1,0 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var sign_component_1 = require("./sign/sign.component");
+exports.COMPONENTS = [
+    sign_component_1.SignComponent
+];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLHdEQUFzRDtBQUV6QyxRQUFBLFVBQVUsR0FBVTtJQUM3Qiw4QkFBYTtDQUNoQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgU2lnbkNvbXBvbmVudCB9IGZyb20gJy4vc2lnbi9zaWduLmNvbXBvbmVudCc7XHJcblxyXG5leHBvcnQgY29uc3QgQ09NUE9ORU5UUzogYW55W10gPSBbXHJcbiAgICBTaWduQ29tcG9uZW50XHJcbl07Il19
