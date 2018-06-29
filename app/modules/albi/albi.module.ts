@@ -6,6 +6,8 @@ import { SharedModule } from '../shared/shared.module';
 import { albiRouting } from "./albi.routing";
 import { COMPONENTS } from './components';
 import { PROVIDERS } from './services';
+import { ListaAlbiGuard } from './components/lista-albi/lista-albi.guard';
+import { ListaAlbiResolver } from './components/lista-albi/lista-albi.resolver.service';
 
 @NgModule({
     imports: [
@@ -13,7 +15,9 @@ import { PROVIDERS } from './services';
         albiRouting
     ],
     providers: [
-        ...PROVIDERS
+        ...PROVIDERS,
+        ListaAlbiGuard,
+        ListaAlbiResolver
     ],
     declarations: [
         ...COMPONENTS,

@@ -21,6 +21,8 @@ export class SignComponent {
   constructor(private page: Page, private authService: AuthService, private router: Router) {
     this.page.actionBarHidden = true;
     this.user = new User();
+    this.user.email = "mattia.malandrone@gmail.com";
+    this.user.password = "pippo";
   }
 
   /**

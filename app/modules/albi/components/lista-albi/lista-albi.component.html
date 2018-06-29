@@ -1,4 +1,12 @@
-<StackLayout>
-  <Label class="h3 title"
-    text="Lista Albi"></Label>
-</StackLayout>
+<Page>
+  <StackLayout orientation="vertical">
+    <TextField hint="Enter text" keyboardType="number" autocorrect="false" (textChange)="onTextChange($event)" (returnPress)="onReturn($event)" class="input input-border"></TextField>
+    <ListView [items]="albi" (loadMoreItems)="onLoadMoreItems()" class="list-group"> <!-- (itemTap)="onItemTap($event)" -->
+      <ng-template let-albo="item" let-i="index" let-odd="odd" let-even="even">
+          <GridLayout class="list-group-item">
+              <Label [text]="albo.numero + ' - ' + albo.title" (swipe)="goToAlbo(albo.numero)"></Label>
+          </GridLayout>
+      </ng-template>
+    </ListView>
+  </StackLayout>
+</Page>

@@ -1,4 +1,10 @@
 <StackLayout>
-  <Label class="h1 title"
-    text="dettaglio-albo Is working"></Label>
+  <StackLayout orientation="vertical">
+    <Label class="h3 title" text=""></Label>
+    <TextView loaded="onTextViewLoaded" text="{{albo.title}}" editable="false" class="input input-border"></TextView>
+    <ListPicker row="1"
+                [items]="stati"
+                [selectedIndex]="selectedIndex"
+                (selectedIndexChange)="selectedIndexChanged($event)" class="p-15 picker"></ListPicker>
+  </StackLayout>
 </StackLayout>

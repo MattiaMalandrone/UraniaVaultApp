@@ -6,6 +6,7 @@ import * as appSettings from 'application-settings';
 interface IKeys {
     currentUser: string;
     accessToken: string;
+    host: string;
 }
 
 @Injectable()
@@ -13,8 +14,17 @@ export class DatabaseService {
 
     public static KEYS: IKeys = {
         currentUser: 'current-user',
-        accessToken: 'access-token'
+        accessToken: 'access-token',
+        host: 'host'
     };
+
+    /**
+     *
+     */
+    constructor() {
+        // // https://urania-vault-node.herokuapp.com
+        this.setItem(DatabaseService.KEYS.host, "http://10.0.2.2:5000");
+    }
 
     /**
      *

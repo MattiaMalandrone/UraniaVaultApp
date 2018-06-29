@@ -10,6 +10,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 @Injectable()
 export class AuthService {
 
+    host: string;
+
     // access our current user from anywhere
     public static CURRENT_USER: AuthUser;
 
@@ -36,6 +38,7 @@ export class AuthService {
      *
      */
     private _init() {
+        this.host = this.databaseService.getItem(DatabaseService.KEYS.host);
         AuthService.CURRENT_USER = this.databaseService.getItem(DatabaseService.KEYS.currentUser);
         this.logService.debug(`Current user: `, AuthService.CURRENT_USER);
         this._notifyState(!!AuthService.CURRENT_USER);
@@ -61,7 +64,7 @@ export class AuthService {
             })
         };
 
-        return this.httpClient.post(`http://10.0.2.2:5000/api/users/signup`, user, httpOptions);
+        return this.httpClient.post(`${this.host}/api/users/signup`, user, httpOptions);
     }
 
     /**
@@ -74,8 +77,8 @@ export class AuthService {
                 'Content-Type':  'application/json'
             })
         };
-
-        return this.httpClient.post(`http://10.0.2.2:5000/api/auth/signin`, user, httpOptions);
+        console.log('starting http call for login...' + this.host);
+        return this.httpClient.post(`${this.host}/api/auth/signin`, user, httpOptions);
     }
 
     /**
