@@ -19,9 +19,11 @@ interface Stati {
 export class DettaglioAlboComponent implements OnInit {
 
   albo: any;
+  numeroAlbo: number;
   stati: any[] = [];
   items: object = {};
   selectedIndex: number = 0;
+  statusColor: string = "white";
 
   constructor(private route: ActivatedRoute, private albiService: AlbiService,) { }
 
@@ -30,9 +32,13 @@ export class DettaglioAlboComponent implements OnInit {
    */
   ngOnInit() {
     console.log('inside dettaglio albo');
-    const numeroAlbo = this.route.snapshot.params.numero;
+    this.numeroAlbo = +this.route.snapshot.params.numero;
 
-    this.albiService.getAlbo(numeroAlbo).subscribe((albo) => this.albo = albo);
+    this.albiService.getAlbo(this.numeroAlbo).subscribe((albo) => {
+      this.albo = albo;
+      this.setStatus(albo);
+      this.selectedIndex = parseInt(albo.status);
+    });
 
     this.albiService.getListaStati().subscribe( (stati: any[]) => {
 
@@ -58,12 +64,51 @@ export class DettaglioAlboComponent implements OnInit {
     const picker = <ListPicker>args.object;
     const stato = picker.selectedIndex;
 
+    if(!this.albo)
+      return;
+
     console.log("AlboId:", this.albo._id);
     console.log("Stato:", stato);
 
-    this.albiService.updateAlbo(this.albo._id, stato).subscribe(res => {
-      console.log(res);
+    this.albiService.updateAlbo(this.albo._id, stato).subscribe(res => this.selectedIndex = stato);
+  }
+
+  /**
+   *
+   * @param albo
+   */
+  setStatus(albo) {
+    switch(albo.status) {
+      case 0 : this.statusColor = 'lightred'; break;
+      case 1 : this.statusColor = 'lightgreen'; break;
+      case 2 : this.statusColor = 'lightyellow'; break;
+      default: this.statusColor = 'white'; break;
+    }
+  }
+
+  /**
+   *
+   */
+  prev(numeroAlbo) {
+    this.numeroAlbo = numeroAlbo;
+    this.albiService.getAlbo(numeroAlbo).subscribe((albo) => {
+      this.albo = albo;
+      this.setStatus(albo);
+      console.log(albo.status);
+      this.selectedIndex = parseInt(albo.status);
     });
   }
 
+  /**
+   *
+   */
+  next(numeroAlbo) {
+    this.numeroAlbo = numeroAlbo;
+    this.albiService.getAlbo(numeroAlbo).subscribe((albo) => {
+      this.albo = albo;
+      this.setStatus(albo);
+      console.log(albo.status);
+      this.selectedIndex = parseInt(albo.status);
+    });
+  }
 }

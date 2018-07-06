@@ -1,6 +1,12 @@
 <Page>
+
   <StackLayout orientation="vertical">
-    <TextField hint="Enter text" keyboardType="number" autocorrect="false" (textChange)="onTextChange($event)" (returnPress)="onReturn($event)" class="input input-border"></TextField>
+
+    <SearchBar hint="Cerca albo" top="0" (textChange)="onTextChange($event)" (submit)="onReturn($event)" keyboardType="number"
+               color="white" textFieldBackgroundColor="lightgray" textFieldHintColor="white"></SearchBar>
+
+    <!-- <TextField hint="Enter text" keyboardType="number" autocorrect="false" (textChange)="onTextChange($event)" (returnPress)="onReturn($event)" class="input input-border"></TextField> -->
+
     <ListView [items]="albi" (loadMoreItems)="onLoadMoreItems()" class="list-group"> <!-- (itemTap)="onItemTap($event)" -->
       <ng-template let-albo="item" let-i="index" let-odd="odd" let-even="even">
           <GridLayout class="list-group-item">
@@ -8,5 +14,8 @@
           </GridLayout>
       </ng-template>
     </ListView>
+
+    <ActivityIndicator row="1" #activityIndicator [busy]="isBusy" (busyChange)="onBusyChanged($event)" width="100" height="100" class="activity-indicator"></ActivityIndicator>
+
   </StackLayout>
 </Page>

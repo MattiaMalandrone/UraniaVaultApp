@@ -19,6 +19,6 @@ export class ListaAlbiResolver implements Resolve<any>  {
      */
     resolve() {
         console.log('resolving data...');
-        return this.albiService.getList(0);
+        return this.albiService.getList(0, null);
     }
 }

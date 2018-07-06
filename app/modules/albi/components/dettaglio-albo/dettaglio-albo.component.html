@@ -1,10 +1,17 @@
-<StackLayout>
-  <StackLayout orientation="vertical">
-    <Label class="h3 title" text=""></Label>
-    <TextView loaded="onTextViewLoaded" text="{{albo.title}}" editable="false" class="input input-border"></TextView>
-    <ListPicker row="1"
-                [items]="stati"
-                [selectedIndex]="selectedIndex"
-                (selectedIndexChange)="selectedIndexChanged($event)" class="p-15 picker"></ListPicker>
-  </StackLayout>
-</StackLayout>
+ <Page>
+    <StackLayout orientation="vertical" backgroundColor="{{statusColor}}">
+      <label class="h5 p-10 p-b-0 m-0" text="{{albo?.numero}} - {{albo?.title}}" textWrap="true" style="color: #4A4240;"></label>
+      <label class="h6 p-10 p-t-0 p-b-0 m-0" [text]="albo?.autore" textWrap="true" style="color: rgb(139, 132, 131);"></label>
+
+      <StackLayout  orientation="horizontal">
+        <Button [text]="albo?.numero-1" width="55" class="btn btn-primary" (tap)="prev(numeroAlbo-1)"></Button>
+        <Image [src]="albo?.urlCover" width="130" height="200" stretch="aspectFit" row="0" col="0" class="m-5"></Image>
+        <Button [text]="albo?.numero+1" width="55" class="btn btn-primary" (tap)="next(numeroAlbo+1)"></Button>
+      </StackLayout>
+
+      <ListPicker row="1"
+                  [items]="stati"
+                  [selectedIndex]="selectedIndex"
+                  (selectedIndexChange)="selectedIndexChanged($event)" class="p-15 picker"></ListPicker>
+    </StackLayout>
+</Page>
