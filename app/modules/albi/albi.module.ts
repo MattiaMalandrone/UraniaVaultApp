@@ -8,6 +8,8 @@ import { COMPONENTS } from './components';
 import { PROVIDERS } from './services';
 import { ListaAlbiGuard } from './components/lista-albi/lista-albi.guard';
 import { ListaAlbiResolver } from './components/lista-albi/lista-albi.resolver.service';
+import { DettaglioAlboResolver } from '~/modules/albi/components/dettaglio-albo/dettaglio-albo.resolver.service';
+import { DettaglioAlboGuard } from '~/modules/albi/components/dettaglio-albo/dettaglio-albo.guard';
 
 @NgModule({
     imports: [
@@ -17,7 +19,9 @@ import { ListaAlbiResolver } from './components/lista-albi/lista-albi.resolver.s
     providers: [
         ...PROVIDERS,
         ListaAlbiGuard,
-        ListaAlbiResolver
+        DettaglioAlboGuard,
+        ListaAlbiResolver,
+        DettaglioAlboResolver
     ],
     declarations: [
         ...COMPONENTS,

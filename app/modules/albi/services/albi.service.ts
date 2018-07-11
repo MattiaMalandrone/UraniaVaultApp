@@ -26,12 +26,10 @@ export class AlbiService {
      *
      */
     initCatalogo(user: AuthUser): Observable<any> {
-        console.log('INIT CATALOGO');
         return this.httpClient.post(`${this.host}/api/albi/init`, user, httpOptions);
     }
 
     updateCatalogo(user: AuthUser): Observable<any> {
-        console.log('UPDATE CATALOGO');
         return this.httpClient.post(`${this.host}/api/albi/update`, user, httpOptions);
     }
 
@@ -39,8 +37,9 @@ export class AlbiService {
         return this.httpClient.get(`${this.host}/api/albi/isFirstAccess/${email}`, httpOptions);
     }
 
-    getList(countAlbiLoaded: number, filter: string): Observable<any> {
-        return this.httpClient.get(`${this.host}/api/albi/list/${AuthService.CURRENT_USER.email}/${countAlbiLoaded}/${filter}`, httpOptions);
+    getList(lastAlboNumero: string, filter: string): Observable<any> {
+        if(filter === '') filter = null;
+        return this.httpClient.get(`${this.host}/api/albi/list/${AuthService.CURRENT_USER.email}/${lastAlboNumero}/${filter}`, httpOptions);
     }
 
     getAlbo(numero: number): Observable<any> {
@@ -57,7 +56,7 @@ export class AlbiService {
         return of(listaStati);
     }
 
-    updateAlbo(idAlbo: string, stato: number): Observable<any> {
+    updateAlbo(idAlbo: string, stato: number): Observable<{}> {
         return this.httpClient.put(`${this.host}/api/albi/albo/${AuthService.CURRENT_USER.email}/${idAlbo}/${stato}`, httpOptions);
     }
 }

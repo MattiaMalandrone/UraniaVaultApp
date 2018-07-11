@@ -22,8 +22,10 @@ export class DatabaseService {
      *
      */
     constructor() {
-        // // https://urania-vault-node.herokuapp.com
-        this.setItem(DatabaseService.KEYS.host, "http://10.0.2.2:5000");
+        // "https://urania-vault-node.herokuapp.com"
+        // "http://10.0.2.2:5000"
+        this.removeItem(DatabaseService.KEYS.host);
+        this.setItem(DatabaseService.KEYS.host, "https://urania-vault-node.herokuapp.com");
     }
 
     /**

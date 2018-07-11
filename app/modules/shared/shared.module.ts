@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
+import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 
 // app
 // import { PIPES } from './pipes';
@@ -14,6 +15,7 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
     CommonModule,
     NativeScriptCommonModule,
     NativeScriptFormsModule,
+    NativeScriptHttpClientModule,
     NativeScriptUIListViewModule
   ],
   declarations: [
@@ -23,6 +25,7 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
     CommonModule,
     NativeScriptCommonModule,
     NativeScriptFormsModule,
+    NativeScriptHttpClientModule,
     NativeScriptUIListViewModule
   ]
 })

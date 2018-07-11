@@ -9,9 +9,9 @@
         <Button [text]="albo?.numero+1" width="55" class="btn btn-primary" (tap)="next(numeroAlbo+1)"></Button>
       </StackLayout>
 
-      <ListPicker row="1"
-                  [items]="stati"
+      <ListPicker [items]="stati"
                   [selectedIndex]="selectedIndex"
-                  (selectedIndexChange)="selectedIndexChanged($event)" class="p-15 picker"></ListPicker>
+                  (selectedIndexChange)="selectedIndexChanged($event)"
+                  class="p-15 picker"></ListPicker>
     </StackLayout>
 </Page>

@@ -113,11 +113,11 @@ background-color: #30bcff;
 }
 
 .page label.text-danger, .tab-view label.text-danger {
-color: #ef473a;
+color: #d9534f;
 }
 
 .page label.bg-danger, .tab-view label.bg-danger {
-background-color: #ef473a;
+background-color: #d9534f;
 }
 
 .page label.text-muted, .tab-view label.text-muted {
@@ -129,19 +129,19 @@ color: #cc0000;
 }
 
 .btn-primary {
-background-color: #990000;
+background-color: #cc0000;
 }
 
 .btn-primary {
-border-color: #990000;
+border-color: #cc0000;
 }
 
 .btn-primary {
-color: #ef473a;
+color: #ffffff;
 }
 
 .btn-outline {
-border-color: #990000;
+border-color: #cc0000;
 }
 
 .btn-outline {
@@ -157,15 +157,15 @@ color: #cc0000;
 }
 
 .btn[isEnabled=false] {
-background-color: #cc0000;
+background-color: #c76363;
 }
 
 .btn[isEnabled=false] {
-border-color: #cc0000;
+border-color: #c76363;
 }
 
 .btn[isEnabled=false] {
-color: #ef473a;
+color: #f8f8f8;
 }
 
 .btn-rounded-sm {
@@ -201,11 +201,11 @@ tab-background-color: #cc0000;
 }
 
 .tab-view {
-android-selected-tab-highlight-color: #ef473a;
+android-selected-tab-highlight-color: #cc0000;
 }
 
 .sidedrawer-header {
-background-color: #ff9900;
+background-color: #cc0000;
 }
 
 .sidedrawer-header-brand {

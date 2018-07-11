@@ -2,9 +2,11 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Router, RouterEvent, Event, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
 import { alert, prompt } from "tns-core-modules/ui/dialogs";
 import { Page } from "tns-core-modules/ui/page";
-import { ActivityIndicator } from "ui/activity-indicator";
+import * as _ from 'lodash';
 
-import { User } from "../../../shared/models";
+import { LoadingIndicator } from "nativescript-loading-indicator";
+
+import { User, AuthUser } from "../../../shared/models";
 import { AuthService } from "../../../core/services/auth.service";
 
 @Component({
@@ -14,11 +16,15 @@ import { AuthService } from "../../../core/services/auth.service";
   styleUrls: ['sign.component.css']
 })
 export class SignComponent {
-    isBusy = false;
+    isLoggedIn = false;
     isLoggingIn = true;
     user: User;
+    currentUser: AuthUser;
+    loader: any;
     @ViewChild("password") password: ElementRef;
     @ViewChild("confirmPassword") confirmPassword: ElementRef;
+
+    public htmlCircle: string;
 
     constructor(private page: Page, private authService: AuthService, private router: Router) {
         this.page.actionBarHidden = true;
@@ -26,41 +32,56 @@ export class SignComponent {
         this.user.email = "mattia.malandrone@gmail.com";
         this.user.password = "pippo";
 
+        this.loader = new LoadingIndicator();
+
         router.events.subscribe((routerEvent: Event) => {
             this.checkRouterEvent(routerEvent);
-          });
+        });
+
+        this.htmlCircle = '<span class="dot"></span>';
+
+        this.currentUser = AuthService.CURRENT_USER;
+        this.isLoggedIn = !_.isNil(AuthService.CURRENT_USER);
     }
 
-  /**
-   *
-   */
-  toggleForm() {
-      this.isLoggingIn = !this.isLoggingIn;
-  }
-
-  /**
-   *
-   */
-  submit() {
-    if (!this.user.email || !this.user.password) {
-        this.alert(`Please provide both an email address and password.`);
-        return;
+    /**
+     *
+     */
+    gotoAlbi() {
+        this.router.navigate(["/albi"]);
     }
 
-    if (this.isLoggingIn) {
-        this.login();
-    } else {
-        this.register();
+    /**
+     *
+     */
+    toggleForm() {
+        this.isLoggingIn = !this.isLoggingIn;
     }
-  }
+
+    /**
+     *
+     */
+    submit() {
+        if (!this.user.email || !this.user.password) {
+            this.alert(`Please provide both an email address and password.`);
+            return;
+        }
+
+        if (this.isLoggingIn) {
+            this.login();
+        } else {
+            this.register();
+        }
+    }
 
     /**
      *
      */
     login() {
-        this.isBusy = true;
+        this.loader.show();
         delete this.user.confirmPassword;
         this.authService.login(this.user).subscribe((res) => {
+            console.log('inside subscribe!!!!');
             this.authService.saveUser(this.user.email);
             this.authService.saveToken(res.token);
             this.router.navigate(["/albi"]);
@@ -136,24 +157,19 @@ export class SignComponent {
       });
   }
 
-  onBusyChanged(args) {
-    let indicator = <ActivityIndicator>args.object;
-      console.log("indicator.busy changed to: " + indicator.busy);
-  }
-
-  /**
+    /**
      *
      * @param routerEvent
      */
     checkRouterEvent(routerEvent: Event): void {
-        if (routerEvent instanceof NavigationStart) {
-          this.isBusy = true;
-        }
+        // if (routerEvent instanceof NavigationStart)
+        //     this.loader.show();
+
+        // console.log(routerEvent);
 
         if (routerEvent instanceof NavigationEnd ||
-            routerEvent instanceof NavigationCancel ||
-            routerEvent instanceof NavigationError) {
-          this.isBusy = false;
-        }
-      }
+                routerEvent instanceof NavigationCancel ||
+                routerEvent instanceof NavigationError)
+                    this.loader.hide();
+    }
 }

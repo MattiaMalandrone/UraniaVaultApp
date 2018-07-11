@@ -1,15 +1,12 @@
-import { alert, prompt } from "tns-core-modules/ui/dialogs";
 import { Component, OnInit } from '@angular/core';
 import { AlbiService } from '~/modules/albi/services';
-import { AuthService } from "~/modules/core/services";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, Event, NavigationEnd, NavigationStart, RoutesRecognized } from "@angular/router";
 import { TextField } from "ui/text-field";
-import { ActivityIndicator } from "ui/activity-indicator";
+import { LoadingIndicator } from "nativescript-loading-indicator";
+import * as _ from 'lodash';
 
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime, filter, pairwise } from 'rxjs/operators';
 import { Subject } from "rxjs";
-
-import { RouterExtensions } from "nativescript-angular/router";
 
 class Albo {
   constructor(public numero: number, public title: string) { }
@@ -23,16 +20,18 @@ class Albo {
 })
 export class ListaAlbiComponent implements OnInit {
 
-  public isBusy = true;
+  loader: any;
 
   public albi: Array<Albo> = [];
-  public currentAlbi: Array<Albo> = [];
+  public currentAlbi: Albo[] = [];
 
-  private countAlbiLoaded: number;
+  private lastAlboNumero: any;
 
   searchTerms = new Subject<string>();
   public searchTxt: string = "";
   public currentSearchTxt: string = "";
+
+  previousUrl: string;
 
   constructor(private albiService: AlbiService,
               private route: ActivatedRoute,
@@ -42,37 +41,35 @@ export class ListaAlbiComponent implements OnInit {
    *
    */
   ngOnInit() {
-    console.log(`ngOnInit Lista Albi Cmp`);
-    const albi = this.route.snapshot.data['dataResolved'];
-    this.albi = albi;
+    this.loader = new LoadingIndicator();
 
-    console.log("------------------------------------------------------------------");
-    console.log(albi);
-    console.log("------------------------------------------------------------------");
+    this.albi = this.route.snapshot.data['albiResolved'];
 
-    this.isBusy = false;
+    this.router.events.pipe(
+                              filter(e => e instanceof RoutesRecognized),
+                              pairwise()
+                           )
+                          .subscribe((event: any[]) => this.refreshUpdatedAlbo(event));
 
     this.searchTerms
-          .pipe(
-            debounceTime(1500)
-          )
-          .subscribe(res => {
-            this.getList();
-          });
+                  .pipe(debounceTime(1500))
+                  .subscribe(() => this.getList());
   }
 
   /**
    *
    * @param event
    */
-  onLoadMoreItems() {
+  public onLoadMoreItems() {
 
-    if(this.currentAlbi == this.albi || this.searchTxt == this.currentSearchTxt)
+    this.loader.show();
+
+    if(this.currentAlbi == this.albi)
       return;
 
-    this.currentAlbi = this.albi;
+    this.currentAlbi = this.currentAlbi.concat(this.albi);
 
-    this.countAlbiLoaded = this.albi.length;
+    this.lastAlboNumero = _.last(this.currentAlbi).numero;
 
     console.log('getList - onLoadMoreItems');
     this.getList();
@@ -93,9 +90,18 @@ export class ListaAlbiComponent implements OnInit {
     this.albi = [];
 
     this.searchTxt = textField.text;
-    this.countAlbiLoaded = 0;
+    this.lastAlboNumero = 0;
 
     this.searchTerms.next(textField.text);
+  }
+
+  /**
+   *
+   * @param args
+   */
+  public onClear(args) {
+    console.log('on clear');
+    this.onTextChange(args);
   }
 
   /**
@@ -111,23 +117,50 @@ export class ListaAlbiComponent implements OnInit {
    *
    */
   private getList() {
-    this.albiService.getList(this.countAlbiLoaded, this.searchTxt)
-        .subscribe(res => {
-          console.log(res);
-          this.albi.push.apply(this.albi, res);
-        });
+    this.albiService
+          .getList(this.lastAlboNumero, this.searchTxt)
+          .subscribe(res => {
+            this.albi.push.apply(this.albi, res);
+            this.loader.hide();
+          });
+  }
+
+  /**
+   *
+   * @param args
+   */
+  public loadedSB(args) {
+    setTimeout(() => {
+        console.log(args.object);
+        args.object.dismissSoftInput();
+    }, 200)
   }
 
   /**
    *
    * @param alboNumero
    */
-  goToAlbo(alboNumero: number) {
+  public goToAlbo(alboNumero: number) {
     this.router.navigate(["/albi/albo", alboNumero]);
   }
 
-  onBusyChanged(args) {
-    let indicator = <ActivityIndicator>args.object;
-      console.log("indicator.busy changed to: " + indicator.busy);
+  /**
+   *
+   */
+  private refreshUpdatedAlbo(event) {
+    const urlAfterRedirects = event[0].urlAfterRedirects;
+
+    if(urlAfterRedirects.indexOf('albo/') >= 0) {
+
+      const numeroAlboUpdated = _.last(_.split(urlAfterRedirects, '/'));
+
+      console.log('numeroAlboUpdated: ', numeroAlboUpdated);
+
+      this.albiService.getAlbo(numeroAlboUpdated)
+                                              .subscribe(alboUpdated => {
+                                                const foundIndex = this.albi.findIndex(x => x.numero == numeroAlboUpdated);
+                                                this.albi[foundIndex] = alboUpdated;
+                                              });
+    }
   }
 }

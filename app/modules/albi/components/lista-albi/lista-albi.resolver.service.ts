@@ -18,7 +18,7 @@ export class ListaAlbiResolver implements Resolve<any>  {
      * @param route
      */
     resolve() {
-        console.log('resolving data...');
-        return this.albiService.getList(0, null);
+        console.log('Resolving LISTA ALBI...');
+        return this.albiService.getList("0", null);
     }
 }
