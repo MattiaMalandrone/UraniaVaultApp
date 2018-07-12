@@ -46,7 +46,7 @@ export class DettaglioAlboComponent implements OnInit {
     this.albo = this.route.snapshot.data['alboResolved'];
     this.setStatus(this.albo);
     this.selectedIndex = parseInt(this.albo.stato);
-
+    this.numeroAlbo = this.albo.numero;
     this.albiService.getListaStati().subscribe( (stati: any[]) => {
 
       for(let i = 0; i < stati.length; i++) {
@@ -60,26 +60,6 @@ export class DettaglioAlboComponent implements OnInit {
         this.stati.push(stato);
       }
     });
-
-    // this.router
-    //       .events
-    //       .pipe(filter(evt => evt instanceof NavigationStart))
-    //       .subscribe((routerEvent: Event) =>  {
-    //         console.log('da DETTAGLIO a LISTA');
-    //         this.albiService.updateAlbo(this.albo._id, this.selectedStato).subscribe();
-    //       });
-
-    // const obsRouteNavigation = this.router.events.pipe(filter(evt => evt instanceof NavigationStart));
-    // const updateAlbo = this.albiService.updateAlbo(this.albo._id, this.selectedStato);
-
-    // const obs = obsRouteNavigation.pipe(flatMap(() => updateAlbo));
-
-    // obs.subscribe(res => {
-    //   console.log("----------------");
-    //   console.log("obs subscribe...");
-    //   console.log(res);
-    //   console.log("----------------");
-    // });
   }
   /**
    *
@@ -109,10 +89,12 @@ export class DettaglioAlboComponent implements OnInit {
   /**
    *
    */
-  prev(numeroAlbo) {
+  prev() {
     this.loader.show();
-    this.numeroAlbo = numeroAlbo;
-    this.albiService.getAlbo(numeroAlbo).subscribe((albo) => {
+    console.log('PREV A: ' , this.numeroAlbo);
+    this.numeroAlbo = this.numeroAlbo - 1;
+    console.log('PREV B: ' , this.numeroAlbo);
+    this.albiService.getAlbo(this.numeroAlbo).subscribe((albo) => {
       this.albo = albo;
       this.setStatus(albo);
       this.selectedIndex = parseInt(albo.stato);
@@ -123,10 +105,12 @@ export class DettaglioAlboComponent implements OnInit {
   /**
    *
    */
-  next(numeroAlbo) {
+  next() {
     this.loader.show();
-    this.numeroAlbo = numeroAlbo;
-    this.albiService.getAlbo(numeroAlbo).subscribe((albo) => {
+    console.log('NEXT A: ' , this.numeroAlbo);
+    this.numeroAlbo = this.numeroAlbo + 1;
+    console.log('NEXT B ' , this.numeroAlbo);
+    this.albiService.getAlbo(this.numeroAlbo).subscribe((albo) => {
       this.albo = albo;
       this.setStatus(albo);
       this.selectedIndex = parseInt(albo.stato);
@@ -134,16 +118,4 @@ export class DettaglioAlboComponent implements OnInit {
     });
   }
 
-  /**
-   *
-   */
-  canDeactivate(): Observable<boolean>  {
-    return this.albiService
-                .updateAlbo(this.albo._id, this.selectedStato)
-                .pipe(
-                  map(x => {
-                    return false;
-                  })
-                );
-  }
 }

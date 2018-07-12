@@ -3,11 +3,11 @@
       <label class="h5 p-10 p-b-0 m-0" text="{{albo?.numero}} - {{albo?.title}}" textWrap="true" style="color: #4A4240;"></label>
       <label class="h6 p-10 p-t-0 p-b-0 m-0" [text]="albo?.autore" textWrap="true" style="color: rgb(139, 132, 131);"></label>
 
-      <StackLayout  orientation="horizontal">
-        <Button [text]="albo?.numero-1" width="55" class="btn btn-primary" (tap)="prev(numeroAlbo-1)"></Button>
-        <Image [src]="albo?.urlCover" width="130" height="200" stretch="aspectFit" row="0" col="0" class="m-5"></Image>
-        <Button [text]="albo?.numero+1" width="55" class="btn btn-primary" (tap)="next(numeroAlbo+1)"></Button>
-      </StackLayout>
+      <FlexboxLayout flexDirection="row" alignItems="center" justifyContent="space-between">
+        <Button flexGrow="2" [text]="albo?.numero-1" width="55" class="btn btn-primary" (tap)="prev()"></Button>
+        <Image flexGrow="4" [src]="albo?.urlCover" width="130" height="200" stretch="aspectFit" row="0" col="0" class="m-5"></Image>
+        <Button flexGrow="2" [text]="albo?.numero+1" width="55" class="btn btn-primary" (tap)="next()"></Button>
+      </FlexboxLayout>
 
       <ListPicker [items]="stati"
                   [selectedIndex]="selectedIndex"
