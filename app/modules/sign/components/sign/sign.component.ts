@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
 import { Router, RouterEvent, Event, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
 import { alert, prompt } from "tns-core-modules/ui/dialogs";
 import { Page } from "tns-core-modules/ui/page";
@@ -8,6 +8,7 @@ import { LoadingIndicator } from "nativescript-loading-indicator";
 
 import { User, AuthUser } from "../../../shared/models";
 import { AuthService } from "../../../core/services/auth.service";
+import { DatabaseService } from "~/modules/core/services";
 
 @Component({
   moduleId: module.id,
@@ -15,7 +16,8 @@ import { AuthService } from "../../../core/services/auth.service";
   templateUrl: 'sign.component.html',
   styleUrls: ['sign.component.css']
 })
-export class SignComponent {
+export class SignComponent implements OnInit {
+
     isLoggedIn = false;
     isLoggingIn = true;
     user: User;
@@ -26,7 +28,7 @@ export class SignComponent {
 
     public htmlCircle: string;
 
-    constructor(private page: Page, private authService: AuthService, private router: Router) {
+    constructor(private page: Page, private authService: AuthService, private router: Router, private databaseService: DatabaseService) {
         this.page.actionBarHidden = true;
         this.user = new User();
         this.user.email = "mattia.malandrone@gmail.com";
@@ -42,6 +44,13 @@ export class SignComponent {
 
         this.currentUser = AuthService.CURRENT_USER;
         this.isLoggedIn = !_.isNil(AuthService.CURRENT_USER);
+    }
+
+    /**
+     *
+     */
+    ngOnInit(): void {
+
     }
 
     /**
@@ -82,7 +91,7 @@ export class SignComponent {
         delete this.user.confirmPassword;
         this.authService.login(this.user).subscribe((res) => {
             console.log('inside subscribe!!!!');
-            this.authService.saveUser(this.user.email);
+            this.authService.saveUser(this.user.email, res.userId);
             this.authService.saveToken(res.token);
             this.router.navigate(["/albi"]);
         }, err => {

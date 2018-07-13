@@ -94,8 +94,8 @@ export class AuthService {
      * @param email
      * @param password
      */
-    saveUser(email: string) {
-        AuthService.CURRENT_USER = { email };
+    saveUser(email: string, userId) {
+        AuthService.CURRENT_USER = { email, userId };
         this.databaseService.setItem(DatabaseService.KEYS.currentUser, AuthService.CURRENT_USER);
         this._notifyState(true);
     }

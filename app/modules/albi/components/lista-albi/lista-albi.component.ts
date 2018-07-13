@@ -62,6 +62,9 @@ export class ListaAlbiComponent implements OnInit {
    */
   public onLoadMoreItems() {
 
+    if(!_.isEmpty(this.currentSearchTxt))
+      return;
+
     this.loader.show();
 
     if(this.currentAlbi == this.albi)

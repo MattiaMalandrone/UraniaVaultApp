@@ -2,12 +2,11 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { ActivatedRoute, Router, Event, NavigationEnd, NavigationStart } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlbiService } from '~/modules/albi/services';
 import { ListPicker } from "ui/list-picker";
 import { LoadingIndicator } from "nativescript-loading-indicator";
-import { of, Observable, pipe } from 'rxjs';
-import { flatMap, filter, map, throttleTime  } from 'rxjs/operators';
+import { DatabaseService, AuthService } from '~/modules/core/services';
 
 interface Stati {
   key: string;
@@ -33,7 +32,7 @@ export class DettaglioAlboComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private albiService: AlbiService,
-              private router: Router) { }
+              private databaseService: DatabaseService) { }
 
   /**
    *
@@ -68,9 +67,21 @@ export class DettaglioAlboComponent implements OnInit {
   selectedIndexChanged(args) {
     this.loader.show();
     this.selectedStato = <ListPicker>args.object.selectedIndex;
-    this.albiService.updateAlbo(this.albo._id, this.selectedStato).subscribe(r => {
-      this.loader.hide();
-    });
+
+    console.log('isOffline:', this.databaseService.isOffline);
+
+    if(this.databaseService.isOffline) {
+      this.databaseService.existsSqlite(this.albo._id, AuthService.CURRENT_USER.userId).then((existsSqlite) => {
+        console.log('existsSqlite: ', existsSqlite);
+        if(existsSqlite)
+          this.databaseService.patchSqlite(this.albo._id, AuthService.CURRENT_USER.userId, this.selectedStato);
+        else
+          this.databaseService.postSqlite(this.albo._id, AuthService.CURRENT_USER.userId, this.selectedStato);
+      }, (err) => console.log('ERRORE sulla existsSqlite: ', err));
+      this.loader.hide()
+    }
+    else
+      this.albiService.updateAlbo(this.albo._id, this.selectedStato).subscribe(() => this.loader.hide());
   }
 
   /**

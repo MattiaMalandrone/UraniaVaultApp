@@ -5,5 +5,6 @@ export class User {
 }
 
 export class AuthUser {
+    userId: any;
     email: string;
 }

@@ -1,46 +1,69 @@
-import { Component } from "@angular/core";
-import * as application from "tns-core-modules/application";
-const frameModule = require("tns-core-modules/ui/frame");
-import { RouterExtensions } from "nativescript-angular/router";
-import { Router, RoutesRecognized, NavigationStart } from "@angular/router";
-import { filter, pairwise } from "rxjs/operators";
+import { Component, NgZone } from "@angular/core";
+
+import * as Connectivity from "tns-core-modules/connectivity";
+import { DatabaseService, AuthService } from "~/modules/core/services";
+import { AlbiService } from "~/modules/albi/services";
+
+const connectionTypes = {
+    none: "No Connection!",
+    wifi: "Connected to WiFi!",
+    mobile: "Connected to Cellular!",
+    unknown: 'Unknown'
+}
 
 @Component({
     selector: "ns-app",
     template: `<!-- https://docs.nativescript.org/angular/core-concepts/angular-navigation.html#page-router-outlet -->
                <page-router-outlet></page-router-outlet>`,
 })
-
 export class AppComponent {
+
+    public connectionType: string;
 
     /**
      *
      */
-    constructor(private routerExt: RouterExtensions, private router: Router) {
-
+    constructor(private zone: NgZone, private databaseService: DatabaseService, private albiService: AlbiService) {
+        this.connectionType = connectionTypes.unknown;
+        this.databaseService.initSqlite();
     }
 
     /**
      *
      */
     public ngOnInit() {
-        // application.android.on(application.AndroidApplication.activityBackPressedEvent, (args: application.AndroidActivityBackPressedEventData) => {
-        //     if (this.routerExt.canGoBack()) {
+        this.connectionType = this.connectionToString(Connectivity.getConnectionType());
+        Connectivity.startMonitoring(connectionType => {
+            this.zone.run(() => {
+                this.connectionType = this.connectionToString(connectionType);
+                this.databaseService.isOffline = this.connectionType == connectionTypes.none;
+                if(!this.databaseService.isOffline)
+                {
+                    this.databaseService.getOfflineData(AuthService.CURRENT_USER.userId).then(data => {
+                        console.log(data);
+                        if(data !== null) {
+                            this.albiService.syncSqliteInMongoDb().then()
+                        }
+                    });
+                }
+            });
+        });
+    }
 
-        //         this.router.events.pipe(
-        //             filter(e => e instanceof NavigationStart),
-        //             pairwise()
-        //          )
-        //         .subscribe((event: any[]) => {
-        //             console.log('###########################');
-        //             console.log(event[0].urlAfterRedirects);
-        //             console.log('###########################');
-        //             args.cancel = true;
-        //             this.routerExt.back();
-        //         });
-        //     } else {
-        //         args.cancel = false;
-        //     }
-        // });
+    /**
+     *
+     * @param connectionType
+     */
+    public connectionToString(connectionType: number): string {
+        switch(connectionType) {
+            case Connectivity.connectionType.none:
+                return connectionTypes.none;
+            case Connectivity.connectionType.wifi:
+                return connectionTypes.wifi;
+            case Connectivity.connectionType.mobile:
+                return connectionTypes.mobile;
+            default:
+                return connectionTypes.unknown;
+        }
     }
 }
