@@ -60,14 +60,13 @@ export class AlbiService {
         return this.httpClient.put(`${this.host}/api/albi/albo/${AuthService.CURRENT_USER.email}/${idAlbo}/${stato}`, httpOptions);
     }
 
-
     /**
      *
      */
     syncSqliteInMongoDb(offlineData: any[]) {
         for(let i = 0; i < offlineData.length; i++) {
             const offlineItem = offlineData[i];
-            this.updateAlbo(offlineItem[i][0], offlineItem[i][2])
+            this.updateAlbo(offlineItem[i][0], offlineItem[i][2]);
         }
         this.databaseService.removeDatabaseSqlite();
     }

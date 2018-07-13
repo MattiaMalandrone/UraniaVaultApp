@@ -2,7 +2,6 @@ import { Component, NgZone } from "@angular/core";
 
 import * as Connectivity from "tns-core-modules/connectivity";
 import { DatabaseService, AuthService } from "~/modules/core/services";
-import { AlbiService } from "~/modules/albi/services";
 
 const connectionTypes = {
     none: "No Connection!",
@@ -23,7 +22,7 @@ export class AppComponent {
     /**
      *
      */
-    constructor(private zone: NgZone, private databaseService: DatabaseService, private albiService: AlbiService) {
+    constructor(private zone: NgZone, private databaseService: DatabaseService) {
         this.connectionType = connectionTypes.unknown;
         this.databaseService.initSqlite();
     }
@@ -37,15 +36,6 @@ export class AppComponent {
             this.zone.run(() => {
                 this.connectionType = this.connectionToString(connectionType);
                 this.databaseService.isOffline = this.connectionType == connectionTypes.none;
-                if(!this.databaseService.isOffline)
-                {
-                    this.databaseService.getOfflineData(AuthService.CURRENT_USER.userId).then(data => {
-                        console.log(data);
-                        if(data !== null) {
-                            this.albiService.syncSqliteInMongoDb().then()
-                        }
-                    });
-                }
             });
         });
     }

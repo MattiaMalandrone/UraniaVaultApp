@@ -31,7 +31,7 @@ export class DatabaseService {
         // "https://urania-vault-node.herokuapp.com"
         // "http://10.0.2.2:5000"
         this.removeItem(DatabaseService.KEYS.host);
-        this.setItem(DatabaseService.KEYS.host, "http://10.0.2.2:5000");
+        this.setItem(DatabaseService.KEYS.host, "https://urania-vault-node.herokuapp.com");
     }
 
     /**
@@ -69,8 +69,6 @@ export class DatabaseService {
      */
     public initSqlite() {
         console.log('INIT SQLITE...');
-
-
 
         (new Sqlite("my.uraniaVault")).then(db => {
             db.execSQL(`CREATE TABLE IF NOT EXISTS relations (_id INTEGER PRIMARY KEY,

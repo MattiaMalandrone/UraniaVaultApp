@@ -36,6 +36,8 @@ export class SignComponent implements OnInit {
 
         this.loader = new LoadingIndicator();
 
+        this.loader.hide();
+
         router.events.subscribe((routerEvent: Event) => {
             this.checkRouterEvent(routerEvent);
         });
@@ -57,6 +59,7 @@ export class SignComponent implements OnInit {
      *
      */
     gotoAlbi() {
+        this.loader.show();
         this.router.navigate(["/albi"]);
     }
 
